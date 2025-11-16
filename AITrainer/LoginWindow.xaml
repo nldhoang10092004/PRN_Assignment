@@ -1,0 +1,150 @@
+﻿<Page x:Class="WPFAPP.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Login"
+        Width="420" Height="800"
+        Background="#222222">
+
+    <Grid>
+        <!-- Khung “màn hình điện thoại” -->
+        <Border Width="370" Height="760"
+                Background="{StaticResource BgLoginBrush}"  
+            CornerRadius="24"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <Grid Margin="0 40 0 40">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Logo + subtitle -->
+                <StackPanel Grid.Row="0"
+                            Margin="0 80 0 -20"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="PENGU"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextDarkBrush}"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Self Practice Deeply"
+                               FontSize="13"
+                               Foreground="Teal"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- CARD ĐĂNG NHẬP -->
+                <Border Grid.Row="1"
+                        CornerRadius="24"
+                        Background="White"
+                        Padding="24"
+                        Margin="26,69,26,217">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                                   Text="Login to Continue"
+                                   FontWeight="Bold"
+                                   FontSize="16"
+                                   Margin="0 0 0 16"/>
+
+                        <!-- Username -->
+                        <StackPanel Grid.Row="1"
+                                    Margin="0,0,0,12">
+                            <TextBlock Text="Username"
+                                       FontSize="12"
+                                       Margin="4 0"/>
+                            <TextBox x:Name="txtUser"
+                                     FontSize="13"
+                                     Foreground="Black"
+                                     BorderThickness="1"
+                                     Padding="8"
+                                     Height="36"
+                                     TextChanged="txtUser_TextChanged"/>
+                        </StackPanel>
+
+                        <!-- Password -->
+                        <StackPanel Grid.Row="2"
+                                    Margin="0,0,0,12">
+                            <TextBlock Text="Password"
+                                       FontSize="12"
+                                       Margin="4 0"/>
+                            <PasswordBox x:Name="txtPass"
+                                         FontSize="13"
+                                         Foreground="Black"
+                                         BorderThickness="1"
+                                         Padding="8"
+                                         Height="36"/>
+                        </StackPanel>
+
+                        <!-- Login -->
+                        <Button x:Name="btnLogin"
+                                Grid.Row="3"
+                                Content="Login"
+                                Margin="0,10,0,0"
+                                Height="40"
+                                Background="Teal"
+                                Foreground="White"
+                                FontWeight="SemiBold"
+                                BorderThickness="0"
+                                Click="btnLogin_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border CornerRadius="12"
+                                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Text dưới: Register -->
+                <TextBlock Grid.Row="1"
+                           Margin="0,407,0,129"
+                           HorizontalAlignment="Center"
+                           FontSize="13">
+                    <Run Text="Don't have an account? " />
+                </TextBlock>
+
+                <!-- Nút Register dạng text -->
+                <Button Grid.Row="1"
+                        Margin="0,433,0,103"
+                        HorizontalAlignment="Center"
+                        Foreground="Teal"
+                        FontSize="14"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand" Click="Button_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <TextBlock Text="Register"
+                                       FontWeight="SemiBold"
+                                       Foreground="{TemplateBinding Foreground}" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <!-- Nút Cancel (đóng form) ở góc trên bên phải -->
+                <Button x:Name="btnCancel"
+                        Width="28" Height="28"
+                        Content="✕"
+                        Background="Transparent"
+                        Foreground="Gray"
+                        BorderThickness="0"
+                        Click="btnCancel_Click"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,8,8,0"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>
