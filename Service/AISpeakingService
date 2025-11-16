@@ -1,4 +1,4 @@
-﻿
+cs
 using Deepgram;
 using Deepgram.Clients.Interfaces.v1;
 using Deepgram.Clients.Listen.v1.REST;
@@ -35,7 +35,7 @@ namespace Service
         public async Task<string> GenerateSpeakingPromptAsync()
             => await _prompt.GenerateSpeakingPromptAsync();
 
-        public async Task<(string transcript, decimal score, string feedback)>
+        public async Task<(string transcript, decimal score, string feedback)> 
             GradeSpeakingAsync(string transcript, string topic)
             => await _grader.GradeSpeakingAsync(transcript, topic);
 
@@ -112,7 +112,7 @@ Return ONLY the JSON, no other text.
                 try
                 {
                     var doc = JsonDocument.Parse(jsonResponse);
-                    return doc.RootElement.GetProperty("Content").GetString()
+                    return doc.RootElement.GetProperty("Content").GetString() 
                            ?? "Describe a memorable event in your life and explain why it was special.";
                 }
                 catch
@@ -158,7 +158,7 @@ Return ONLY the JSON, no other text.
                 _openAiKey = openAiKey ?? throw new Exception("ChatGPT API Key is empty.");
             }
 
-            public async Task<(string transcript, decimal score, string feedback)>
+            public async Task<(string transcript, decimal score, string feedback)> 
                 GradeSpeakingAsync(string transcript, string topic)
             {
                 var gradingPrompt = $@"

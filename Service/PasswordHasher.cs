@@ -46,3 +46,4 @@ namespace Service
             return CryptographicOperations.FixedTimeEquals(key, hash);
         }
     }
+}
