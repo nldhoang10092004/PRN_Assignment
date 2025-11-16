@@ -55,12 +55,8 @@ The question must be realistic, academic, 1–2 sentences only, in English.
 You are an IELTS Writing examiner. 
 Evaluate the following essay and respond only with valid JSON:
 {{
-  ""score"": <overall 0–9>,
-  ""TaskResponse"": <0–9>,
-  ""Coherence"": <0–9>,
-  ""LexicalResource"": <0–9>,
-  ""Grammar"": <0–9>,
-  ""feedback"": ""<2–3 sentences feedback>""
+  ""score"": <1-9>,
+  ""feedback"": ""<6 sentences explaining the score and pointing out specific errors>""
 }}
 Essay: {essay}
 ";

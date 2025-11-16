@@ -1,4 +1,5 @@
-﻿using Deepgram;
+﻿
+using Deepgram;
 using Deepgram.Clients.Interfaces.v1;
 using Deepgram.Clients.Listen.v1.REST;
 using Deepgram.Models.Listen.v1.REST;
@@ -31,10 +32,10 @@ namespace Service
         public async Task<string> TranscribeAsync(byte[] fileBytes)
             => await _transcriber.TranscribeAsync(fileBytes);
 
-        public async Task<(string title, string content)> GenerateSpeakingPromptAsync()
+        public async Task<string> GenerateSpeakingPromptAsync()
             => await _prompt.GenerateSpeakingPromptAsync();
 
-        public async Task<(decimal overall, decimal fluency, decimal lexical, decimal grammar, decimal pronunciation, string feedback)>
+        public async Task<(string transcript, decimal score, string feedback)>
             GradeSpeakingAsync(string transcript, string topic)
             => await _grader.GradeSpeakingAsync(transcript, topic);
 
@@ -81,7 +82,7 @@ namespace Service
             }
         }
 
-//ChatGPT
+        //ChatGPT
         public class PromptModule
         {
             private readonly HttpClient _http;
@@ -93,15 +94,17 @@ namespace Service
                 _openAiKey = openAiKey ?? throw new Exception("ChatGPT API Key is empty.");
             }
 
-            public async Task<(string title, string content)> GenerateSpeakingPromptAsync()
+            public async Task<string> GenerateSpeakingPromptAsync()
             {
                 var systemPrompt = @"
 You are an IELTS Speaking Part 2 question generator.
 Generate ONE realistic IELTS Speaking Part 2 topic formatted strictly as JSON string:
 {
-  ""Title"": ""IELTS Speaking Part 2 - AI Gen"",
   ""Content"": ""<the topic card question here>""
 }
+
+The question must be realistic, clear, and suitable for IELTS Speaking Part 2.
+Return ONLY the JSON, no other text.
 ";
 
                 var jsonResponse = await CallOpenAIAsync(systemPrompt);
@@ -109,15 +112,12 @@ Generate ONE realistic IELTS Speaking Part 2 topic formatted strictly as JSON st
                 try
                 {
                     var doc = JsonDocument.Parse(jsonResponse);
-                    return (
-                        doc.RootElement.GetProperty("Title").GetString() ?? "IELTS Speaking Part 2 - AI Gen",
-                        doc.RootElement.GetProperty("Content").GetString() ?? ""
-                    );
+                    return doc.RootElement.GetProperty("Content").GetString()
+                           ?? "Describe a memorable event in your life and explain why it was special.";
                 }
                 catch
                 {
-                    return ("IELTS Speaking Part 2 - AI Gen",
-                        "Describe a memorable event in your life and explain why it was special.");
+                    return "Describe a memorable event in your life and explain why it was special.";
                 }
             }
 
@@ -146,7 +146,6 @@ Generate ONE realistic IELTS Speaking Part 2 topic formatted strictly as JSON st
             }
         }
 
-
         //Grading
         public class GradingModule
         {
@@ -159,23 +158,23 @@ Generate ONE realistic IELTS Speaking Part 2 topic formatted strictly as JSON st
                 _openAiKey = openAiKey ?? throw new Exception("ChatGPT API Key is empty.");
             }
 
-            public async Task<(decimal overall, decimal fluency, decimal lexical,
-                               decimal grammar, decimal pronunciation, string feedback)>
+            public async Task<(string transcript, decimal score, string feedback)>
                 GradeSpeakingAsync(string transcript, string topic)
             {
                 var gradingPrompt = $@"
 You are an IELTS Speaking examiner.
-Respond only with valid JSON:
+Evaluate the speaking response and respond ONLY with valid JSON:
 {{
-  ""score"": <0-9>,
-  ""Fluency"": <0-9>,
-  ""LexicalResource"": <0-9>,
-  ""Grammar"": <0-9>,
-  ""Pronunciation"": <0-9>,
-  ""feedback"": ""<3 sentences>""
+  ""score"": <1-9>,
+  ""feedback"": ""<6 sentences explaining the score and pointing out specific errors>""
 }}
+
 Transcript: {transcript}
-Topic: {topic}";
+Topic: {topic}
+
+Provide detailed feedback covering fluency, vocabulary, grammar, and pronunciation errors if any.
+Return ONLY the JSON, no other text.
+";
 
                 var jsonResponse = await CallOpenAIAsync(gradingPrompt);
                 var extractedJson = ExtractJson(jsonResponse);
@@ -184,17 +183,14 @@ Topic: {topic}";
                 {
                     var doc = JsonDocument.Parse(extractedJson);
                     return (
+                        transcript,
                         doc.RootElement.GetProperty("score").GetDecimal(),
-                        doc.RootElement.GetProperty("Fluency").GetDecimal(),
-                        doc.RootElement.GetProperty("LexicalResource").GetDecimal(),
-                        doc.RootElement.GetProperty("Grammar").GetDecimal(),
-                        doc.RootElement.GetProperty("Pronunciation").GetDecimal(),
                         doc.RootElement.GetProperty("feedback").GetString() ?? ""
                     );
                 }
                 catch
                 {
-                    return (6.0m, 6.0m, 6.0m, 6.0m, 6.0m, "Default fallback: JSON parsing failed.");
+                    return (transcript, 6.0m, "Default fallback: JSON parsing failed. Unable to grade the response properly.");
                 }
             }
 
