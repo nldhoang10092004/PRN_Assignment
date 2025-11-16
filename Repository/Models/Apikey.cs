@@ -5,8 +5,6 @@ namespace Repository.Models;
 
 public partial class Apikey
 {
-    public int Id { get; set; }
-
     public int UserId { get; set; }
 
     public string? DeepgramKey { get; set; }

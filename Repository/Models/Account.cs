@@ -15,7 +15,7 @@ public partial class Account
 
     public DateTime CreatedAt { get; set; }
 
-    public virtual ICollection<Apikey> Apikeys { get; set; } = new List<Apikey>();
+    public virtual Apikey? Apikey { get; set; }
 
     public virtual UserDetail? UserDetail { get; set; }
 }

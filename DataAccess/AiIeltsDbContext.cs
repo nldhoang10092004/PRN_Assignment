@@ -42,13 +42,13 @@ public partial class AiIeltsDbContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Account__1788CC4C5DE4E411");
+            entity.HasKey(e => e.UserId).HasName("PK__Account__1788CC4C92099754");
 
             entity.ToTable("Account");
 
-            entity.HasIndex(e => e.Username, "UQ__Account__536C85E4D979FD47").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Account__536C85E46DBD207A").IsUnique();
 
-            entity.HasIndex(e => e.Email, "UQ__Account__A9D10534BAA964B4").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Account__A9D1053411C8859F").IsUnique();
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysutcdatetime())");
             entity.Property(e => e.Email)
@@ -64,10 +64,11 @@ public partial class AiIeltsDbContext : DbContext
 
         modelBuilder.Entity<Apikey>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__APIKey__3214EC07BDC0F86F");
+            entity.HasKey(e => e.UserId).HasName("PK__APIKey__1788CC4C8DFCC2D3");
 
             entity.ToTable("APIKey");
 
+            entity.Property(e => e.UserId).ValueGeneratedNever();
             entity.Property(e => e.ChatGptkey)
                 .HasMaxLength(200)
                 .IsUnicode(false)
@@ -76,15 +77,15 @@ public partial class AiIeltsDbContext : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.User).WithMany(p => p.Apikeys)
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.User).WithOne(p => p.Apikey)
+                .HasForeignKey<Apikey>(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_APIKey_Account");
         });
 
         modelBuilder.Entity<SpeakingAnswer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Speaking__3214EC0794D3FF9B");
+            entity.HasKey(e => e.Id).HasName("PK__Speaking__3214EC0740075B13");
 
             entity.ToTable("SpeakingAnswer");
 
@@ -102,14 +103,14 @@ public partial class AiIeltsDbContext : DbContext
 
         modelBuilder.Entity<SpeakingQuestion>(entity =>
         {
-            entity.HasKey(e => e.QuestionId).HasName("PK__Speaking__0DC06FAC6551DB00");
+            entity.HasKey(e => e.QuestionId).HasName("PK__Speaking__0DC06FACECF87D4F");
 
             entity.ToTable("SpeakingQuestion");
         });
 
         modelBuilder.Entity<UserDetail>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__UserDeta__1788CC4CF9FB84D5");
+            entity.HasKey(e => e.UserId).HasName("PK__UserDeta__1788CC4CA118B9BB");
 
             entity.ToTable("UserDetail");
 
@@ -129,7 +130,7 @@ public partial class AiIeltsDbContext : DbContext
 
         modelBuilder.Entity<WritingAnswer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__WritingA__3214EC0754594A5A");
+            entity.HasKey(e => e.Id).HasName("PK__WritingA__3214EC078F04F662");
 
             entity.ToTable("WritingAnswer");
 
@@ -143,7 +144,7 @@ public partial class AiIeltsDbContext : DbContext
 
         modelBuilder.Entity<WritingQuestion>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__WritingQ__3214EC07D6FEB36D");
+            entity.HasKey(e => e.Id).HasName("PK__WritingQ__3214EC074E0B8649");
 
             entity.ToTable("WritingQuestion");
         });
