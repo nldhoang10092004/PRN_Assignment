@@ -1,9 +1,67 @@
 ﻿<Application x:Class="AITrainer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:AITrainer"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
+        <!-- Color palette -->
+        <Color x:Key="BgDarkColor">#051033</Color>
+        <Color x:Key="BgCardPeachColor">#F5C58C</Color>
+        <Color x:Key="BgCardBlueColor">#0B315E</Color>
+        <Color x:Key="AccentRedColor">#FF1440</Color>
+        <Color x:Key="AccentGreenColor">#006666</Color>
+        <Color x:Key="AccentYellowColor">#FFB347</Color>
+        <Color x:Key="BgLoginColor">#F5DDC0</Color>
+        <Color x:Key="TextDarkColor">#101010</Color>
+
+        <SolidColorBrush x:Key="BgDarkBrush" Color="{StaticResource BgDarkColor}" />
+        <SolidColorBrush x:Key="BgCardPeachBrush" Color="{StaticResource BgCardPeachColor}" />
+        <SolidColorBrush x:Key="BgCardBlueBrush" Color="{StaticResource BgCardBlueColor}" />
+        <SolidColorBrush x:Key="AccentRedBrush" Color="{StaticResource AccentRedColor}" />
+        <SolidColorBrush x:Key="AccentGreenBrush" Color="{StaticResource AccentGreenColor}" />
+        <SolidColorBrush x:Key="AccentYellowBrush" Color="{StaticResource AccentYellowColor}" />
+        <SolidColorBrush x:Key="BgLoginBrush" Color="{StaticResource BgLoginColor}" />
+        <SolidColorBrush x:Key="TextDarkBrush" Color="{StaticResource TextDarkColor}" />
+        <SolidColorBrush x:Key="BgDarkBrushs" Color="#0A0E3B"/>
+        <SolidColorBrush x:Key="WhiteBrush" Color="White" />
+
+        <!-- Style nút chính -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentRedBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="10 8" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="12"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style nút Submit màu xanh -->
+        <Style x:Key="SubmitButtonStyle"
+               BasedOn="{StaticResource PrimaryButtonStyle}"
+               TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentGreenBrush}" />
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+
+        <!-- Style card -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="Padding" Value="20" />
+            <Setter Property="Margin" Value="0 10" />
+            <Setter Property="Background" Value="{StaticResource BgCardBlueBrush}" />
+        </Style>
+
     </Application.Resources>
 </Application>

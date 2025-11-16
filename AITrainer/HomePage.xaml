@@ -1,0 +1,207 @@
+﻿<Page x:Class="WPFAPP.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource BgDarkBrush}"
+      Height="760" Width="370">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Header -->
+            <RowDefinition Height="*"/>
+            <!-- Main content -->
+            <RowDefinition Height="Auto"/>
+            <!-- Bottom nav -->
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0 10 0 10">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="{Binding UserGreeting}"
+                               Foreground="White"
+                               FontSize="24"
+                               FontWeight="Bold"/>
+                    <TextBlock Text="Keep pushing forward!"
+                               Foreground="White"
+                               FontSize="12"/>
+                </StackPanel>
+
+                <!-- Overall Band card -->
+                <Border DockPanel.Dock="Right"
+                        Background="{StaticResource AccentGreenBrush}"
+                        CornerRadius="14"
+                        Padding="10"
+                        HorizontalAlignment="Right">
+                    <StackPanel>
+                        <TextBlock Text="Overall Band"
+                                   FontSize="10"
+                                   Foreground="#F5DDC0"
+                                   HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding OverallBand}" 
+                                   FontSize="20"
+                                   Foreground="#F5DDC0"
+                                   FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </StackPanel>
+
+        <!-- Main cards -->
+        <StackPanel Grid.Row="1" Margin="10,0,10,0" VerticalAlignment="Top" >
+
+            <!-- Writing Practice card -->
+            <Border Style="{StaticResource CardStyle}"
+                    Background="{StaticResource BgCardBlueBrush}"
+                    Height="172">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="Writing Practice"
+                               Foreground="White"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Margin="0,0,0,6" />
+
+                    <TextBlock Grid.Row="1"
+                               Text="AI gen đề + chấm theo 4 tiêu chí IELTS"
+                               Foreground="White"
+                               FontSize="12"
+                               Margin="0,0,0,12"/>
+
+                    <Button Grid.Row="2"
+                            Content="Start Writing  ➜"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            HorizontalAlignment="Left"
+                            Width="278"
+                            Height ="40"
+                            Click="StartWriting_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- Speaking Practice card -->
+            <Border Style="{StaticResource CardStyle}"
+                    Background="{StaticResource BgCardPeachBrush}"
+                    Height="172">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="Speaking Practice"
+                               Foreground="{StaticResource TextDarkBrush}"
+                               FontSize="18"
+                               FontWeight="Bold" />
+
+                    <TextBlock Grid.Row="1"
+                               Text="Luyện nói theo chủ đề, chấm band"
+                               Foreground="{StaticResource TextDarkBrush}"
+                               FontSize="12"
+                               Margin="0,0,0,12"/>
+
+                    <Button Grid.Row="2"
+                            Content="Start Speaking  ➜"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            HorizontalAlignment="Left"
+                            Width="278"
+                            Height ="40"
+                            Click="StartSpeaking_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- Last Session -->
+            <Border Style="{StaticResource CardStyle}"
+                    Background="#F5DDC0">
+                <StackPanel Margin="10">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 0 0 10">
+                        <TextBlock Text="Last Session"
+                                   Foreground="Black"
+                                   FontWeight="SemiBold"/>
+                    </StackPanel>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Writing score -->
+                        <Border Background="White"
+                                CornerRadius="16"
+                                Padding="10"
+                                Margin="0 0 6 0">
+                            <StackPanel>
+                                <TextBlock Text="Writing"
+                                           Foreground="Teal"
+                                           FontSize="12"/>
+                                <TextBlock Text="{Binding LastWritingBand}"   
+                                           Foreground="Black"
+                                           FontSize="20"
+                                           FontWeight="Bold"/>
+                                <TextBlock Text="{Binding LastWritingTime}"   
+                                           Foreground="Gray"
+                                           FontSize="10"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Speaking score -->
+                        <Border Grid.Column="1"
+                                Background="#1E2448"
+                                CornerRadius="16"
+                                Padding="10"
+                                Margin="6 0 0 0">
+                            <StackPanel>
+                                <TextBlock Text="Speaking"
+                                           Foreground="White"
+                                           FontSize="12"/>
+                                <TextBlock Text="{Binding LastSpeakingBand}"   
+                                           Foreground="White"
+                                           FontSize="20"
+                                           FontWeight="Bold"/>
+                                <TextBlock Text="{Binding LastSpeakingTime}"  
+                                           Foreground="LightGray"
+                                           FontSize="10"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!-- Bottom nav -->
+        <Grid Grid.Row="2" Background="#12103D" Height="64" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Home -->
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="20" Foreground="#F20231" HorizontalAlignment="Center"/>
+                <TextBlock Text="Home" FontSize="12" Foreground="#F20231" Margin="0,6,0,0" HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Profile -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="18" Foreground="#EFBF7F" HorizontalAlignment="Center" Opacity="0.85"/>
+                <TextBlock Text="Profile" FontSize="12" Foreground="#EFBF7F" Margin="0,6,0,0" HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Setting -->
+            <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="20" Foreground="#EFBF7F" HorizontalAlignment="Center"/>
+                <TextBlock Text="Setting" FontSize="12" Foreground="#EFBF7F" Margin="0,6,0,0" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

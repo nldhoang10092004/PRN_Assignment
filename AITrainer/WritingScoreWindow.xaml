@@ -1,0 +1,165 @@
+﻿<Page x:Class="WPFAPP.WritingScoreWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource BgDarkBrush}"
+      Width="370" Height="760">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <!-- Nội dung chính -->
+            <RowDefinition Height="Auto"/>
+            <!-- Bottom nav -->
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+
+            <!-- Header Back -->
+            <StackPanel Orientation="Horizontal"
+                        Margin="0 4 0 16"
+                        VerticalAlignment="Top">
+                <Button Width="36" Height="36"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="BackButton_Click">
+                    <TextBlock FontFamily="Segoe Fluent Icons"
+                               Text=""
+                               FontSize="18"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"/>
+                </Button>
+
+                <TextBlock Text="Previous"
+                           VerticalAlignment="Center"
+                           Margin="4 0 0 0"
+                           Foreground="White"
+                           FontSize="14"/>
+            </StackPanel>
+
+            <!-- Card: Writing With AI + Score -->
+            <Border Style="{StaticResource CardStyle}"
+                    Background="#005A8A">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header của card -->
+                    <Grid Grid.Row="0" Margin="0 0 0 12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Icon nền tròn -->
+                        <Border Width="36" Height="36"
+                                CornerRadius="18"
+                                Background="#182447"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="✏"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="18"
+                                       Foreground="White"/>
+                        </Border>
+
+                        <TextBlock Grid.Column="1"
+                                   Text="Writing With AI"
+                                   Margin="10 0 0 0"
+                                   VerticalAlignment="Center"
+                                   Foreground="White"
+                                   FontSize="18"
+                                   FontWeight="Bold"/>
+                    </Grid>
+
+                    <!-- Box trắng: AI Score + Topic -->
+                    <Border Grid.Row="1"
+                            Background="White"
+                            CornerRadius="16"
+                            Padding="14">
+                        <StackPanel>
+                            <TextBlock Text="AI Score: 7.0"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Margin="0 0 0 8"/>
+                            <TextBlock Text="Topic:  Click “Generate” to get an AI-generated writing topic"
+                                       FontSize="12"
+                                       Foreground="Gray"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Card: Feedback -->
+            <Border Style="{StaticResource CardStyle}"
+                    Background="#0C5673" Height="290">
+                <StackPanel>
+                    <TextBlock Text="Your Feed Back Here"
+                               Foreground="White"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Margin="0 0 0 8"/>
+
+                    <Border Background="#F7CDA3"
+                            CornerRadius="16"
+                            Padding="10" Height="219">
+                        <Border Background="White"
+                                CornerRadius="12"
+                                Padding="8">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <TextBox x:Name="FeedbackTextBox"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         BorderThickness="0"
+                                         Background="Transparent"
+                                         Foreground="Black"
+                                         FontSize="13"
+                                         Text="This is your feedback...."/>
+                            </ScrollViewer>
+                        </Border>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- Nút Close -->
+            <Button Content="Close"
+                    Height="50"
+                    Margin="0 16 0 0"
+                    Style="{StaticResource SubmitButtonStyle}"
+                    Click="CloseButton_Click"/>
+        </StackPanel>
+
+        <!-- =================== BOTTOM NAV =================== -->
+        <!-- Bottom nav -->
+        <Grid Grid.Row="2" Background="#12103D" Height="64" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Home -->
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="20" Foreground="#F20231" HorizontalAlignment="Center"/>
+                <TextBlock Text="Home" FontSize="12" Foreground="#F20231" Margin="0,6,0,0" HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Profile -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="18" Foreground="#EFBF7F" HorizontalAlignment="Center" Opacity="0.85"/>
+                <TextBlock Text="Profile" FontSize="12" Foreground="#EFBF7F" Margin="0,6,0,0" HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Setting -->
+            <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="20" Foreground="#EFBF7F" HorizontalAlignment="Center"/>
+                <TextBlock Text="Setting" FontSize="12" Foreground="#EFBF7F" Margin="0,6,0,0" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</Page>
