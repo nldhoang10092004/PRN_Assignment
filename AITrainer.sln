@@ -1,17 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36623.8 d17.14
+VisualStudioVersion = 17.14.36623.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AITrainer", "AITrainer\AITrainer.csproj", "{696ACEDE-0080-414E-AF86-0962B5AA9285}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AITrainer", "AITrainer\AITrainer.csproj", "{696ACEDE-0080-414E-AF86-0962B5AA9285}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{A0A14455-2CC2-402A-9EC2-23560C23CA29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{A0A14455-2CC2-402A-9EC2-23560C23CA29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{F162A75E-7A97-4761-9F56-0C98BF38D3C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{F162A75E-7A97-4761-9F56-0C98BF38D3C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{98F11841-67C9-4D05-8A8E-88F7C233733D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{98F11841-67C9-4D05-8A8E-88F7C233733D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{06425FAA-2896-4480-9009-7E66DE8B1777}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{06425FAA-2896-4480-9009-7E66DE8B1777}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner", "TestRunner\TestRunner.csproj", "{485031B0-CFDC-4D1D-B7EF-DD71E5F3E14D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{06425FAA-2896-4480-9009-7E66DE8B1777}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06425FAA-2896-4480-9009-7E66DE8B1777}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06425FAA-2896-4480-9009-7E66DE8B1777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{485031B0-CFDC-4D1D-B7EF-DD71E5F3E14D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{485031B0-CFDC-4D1D-B7EF-DD71E5F3E14D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{485031B0-CFDC-4D1D-B7EF-DD71E5F3E14D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{485031B0-CFDC-4D1D-B7EF-DD71E5F3E14D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
