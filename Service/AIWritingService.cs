@@ -4,7 +4,7 @@ using System.Text.Json;
 using Repository.DAO;
 using Repository.Models;
 
-namespace AI.Services
+namespace Service
 {
     public class AIWritingService
     {
