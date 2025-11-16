@@ -1,0 +1,9 @@
+# Common
+*.log
+*.user
+*.DS_Store
+.vscode/
+.idea/
+bin/
+obj/
+.vs/
