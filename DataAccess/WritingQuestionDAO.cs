@@ -15,12 +15,7 @@ namespace Repository.DAO
             _context = context;
         }
 
-        // ====================================
-        // 1️⃣ LƯU QUESTION (tạo mới)
-        // ====================================
-        /// <summary>
-        /// Tạo mới một WritingQuestion và lưu vào DB.
-        /// </summary>
+
         public async Task<WritingQuestion> SaveQuestionAsync(string content)
         {
             var question = new WritingQuestion
@@ -35,7 +30,6 @@ namespace Repository.DAO
             return question;
         }
 
-        // Overload nếu bạn muốn truyền luôn object:
         public async Task<WritingQuestion> SaveQuestionAsync(WritingQuestion question)
         {
             _context.WritingQuestions.Add(question);
@@ -43,12 +37,7 @@ namespace Repository.DAO
             return question;
         }
 
-        // ====================================
-        // 2️⃣ LƯU ANSWER CHO MỘT QUESTION
-        // ====================================
-        /// <summary>
-        /// Lưu 1 lần làm bài (answer) cho câu hỏi.
-        /// </summary>
+
         public async Task<WritingAnswer> SaveAnswerAsync(
             int questionId,
             string? content,
@@ -84,26 +73,21 @@ namespace Repository.DAO
         /// <summary>
         /// Lấy 5 answer mới nhất (Id lớn nhất) cho 1 question.
         /// </summary>
-        public async Task<List<WritingAnswer>> GetLastFiveAttemptsAsync(int questionId)
+        public async Task<List<WritingAnswer>> GetLastFiveAttemptsAsync()
         {
             return await _context.WritingAnswers
-                .Where(a => a.QuestionId == questionId)
                 .OrderByDescending(a => a.Id)          // Id càng lớn càng mới
                 .Take(5)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        // Nếu bạn cần cả thông tin question kèm theo:
-        public async Task<List<WritingAnswer>> GetLastFiveAttemptsWithQuestionAsync(int questionId)
+        public async Task<WritingAnswer?> GetLastAttemptAsync()
         {
             return await _context.WritingAnswers
-                .Where(a => a.QuestionId == questionId)
-                .Include(a => a.Question)
                 .OrderByDescending(a => a.Id)
-                .Take(5)
                 .AsNoTracking()
-                .ToListAsync();
+                .FirstOrDefaultAsync();
         }
     }
 }
