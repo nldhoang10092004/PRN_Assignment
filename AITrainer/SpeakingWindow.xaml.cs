@@ -7,6 +7,8 @@ using NAudio.Wave;
 using Service;              // 👈 nhớ thêm namespace Service
 using System.Threading.Tasks;
 using Repository;
+using Repository.DAO;
+using Repository.Models;
 
 namespace WPFAPP
 {
@@ -18,7 +20,8 @@ namespace WPFAPP
         private string _currentFilePath;
         private DateTime _recordStartTime;
         private DispatcherTimer _timer;
-
+        private SpeakingQuestionDAO _dao;
+        private SpeakingQuestion _currentQuestion;
         // 👇 Thêm mấy field này
         private AISpeakingService? _speakingService;
         private readonly int _userId;
@@ -37,6 +40,7 @@ namespace WPFAPP
 
             // Khởi tạo AI service async sau khi UI đã load
             Loaded += SpeakingWindow_Loaded;
+            _dao = new SpeakingQuestionDAO();
         }
 
         // Khởi tạo AISpeakingService không bị .Result deadlock
@@ -77,6 +81,7 @@ namespace WPFAPP
 
                 var topic = await _speakingService.GenerateSpeakingPromptAsync();
                 TopicTextBox.Text = topic;
+                _currentQuestion = await _dao.SaveQuestionAsync(topic);
             }
             catch (Exception ex)
             {
@@ -238,21 +243,11 @@ namespace WPFAPP
                     return;
                 }
 
-                // 3️⃣ Gửi transcript + topic để chấm điểm
+                //  Gửi transcript + topic để chấm điểm
                 var topic = TopicTextBox.Text;
                 var (finalTranscript, score, feedback) =
                     await _speakingService.GradeSpeakingAsync(transcript, topic);
-
-                // Hiển thị kết quả (Đang test)
-                MessageBox.Show(
-                    $"Topic:\n{topic}\n\n" +
-                    $"Transcript:\n{finalTranscript}\n\n" +
-                    $"Score: {score}\n\n" +
-                    $"Feedback:\n{feedback}",
-                    "Speaking Result",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
+                await _dao.SaveAnswerAsync(_currentQuestion.QuestionId, finalTranscript, score, feedback);
                 WritingScoreWindow scorePage = new WritingScoreWindow(topic, score, feedback);
                 NavigationService?.Navigate(scorePage);
 
