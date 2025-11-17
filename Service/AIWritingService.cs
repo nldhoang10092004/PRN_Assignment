@@ -11,18 +11,29 @@ namespace Service
         private readonly HttpClient _http;
         private readonly string _openAiKey;
 
-        public AIWritingService(int userId, APIKeyDAO apiKeyDao)
+        // private ctor: chỉ nhận sẵn key
+        private AIWritingService(string openAiKey)
         {
             _http = new HttpClient();
-            
-            var apiKey = apiKeyDao.GetApiKeyAsync(userId).Result
-                        ?? throw new Exception("User has no API key configured.");
+            _openAiKey = openAiKey;
+        }
 
-            _openAiKey = apiKey.ChatGptkey ?? throw new Exception("ChatGPT API Key is empty.");
+        // ✅ Async factory: KHÔNG dùng .Result
+        public static async Task<AIWritingService> CreateAsync(int userId)
+        {
+            var db = new AiIeltsDbContext();
+            var apiKeyDao = new APIKeyDAO(db);
+
+            var apiKey = await apiKeyDao.GetApiKeyAsync(userId)
+                         ?? throw new Exception("User has no API key configured.");
+
+            var key = apiKey.ChatGptkey ?? throw new Exception("ChatGPT API Key is empty.");
+
+            return new AIWritingService(key);
         }
 
         // ======================
-        // 🔹 1️⃣ Sinh đề Writing Task 2
+        // 1️⃣ Sinh đề Writing Task 2
         // ======================               
         public async Task<string> GenerateWritingPromptAsync()
         {
@@ -46,14 +57,13 @@ The question must be realistic, academic, 1–2 sentences only, in English.
         }
 
         // ======================
-        // 🔹 2️⃣ Chấm điểm Writing bài làm
+        // 2️⃣ Chấm điểm Writing bài làm (đã rút gọn: score + feedback)
         // ======================
-        public async Task<(decimal overall, decimal task, decimal coherence, decimal lexical, decimal grammar, string feedback)>
-            GradeWritingAsync(string essay)
+        public async Task<(decimal score, string feedback)> GradeWritingAsync(string essay)
         {
             var gradingPrompt = $@"
 You are an IELTS Writing examiner. 
-Evaluate the following essay and respond only with valid JSON:
+Evaluate the following essay and respond ONLY with valid JSON:
 {{
   ""score"": <1-9>,
   ""feedback"": ""<6 sentences explaining the score and pointing out specific errors>""
@@ -63,27 +73,23 @@ Essay: {essay}
 
             var jsonResponse = await CallOpenAIAsync(gradingPrompt);
             var pureJson = ExtractJsonString(jsonResponse);
-            
+
             try
             {
                 var doc = JsonDocument.Parse(pureJson);
                 return (
                     doc.RootElement.GetProperty("score").GetDecimal(),
-                    doc.RootElement.GetProperty("TaskResponse").GetDecimal(),
-                    doc.RootElement.GetProperty("Coherence").GetDecimal(),
-                    doc.RootElement.GetProperty("LexicalResource").GetDecimal(),
-                    doc.RootElement.GetProperty("Grammar").GetDecimal(),
                     doc.RootElement.GetProperty("feedback").GetString() ?? ""
                 );
             }
             catch
             {
-                return (6.0m, 6.5m, 6.0m, 6.5m, 6.0m, "Default fallback: parsing failed.");
+                return (6.0m, "Default fallback feedback: parsing failed.");
             }
         }
 
         // ======================
-        // 🔹 Helper: gọi OpenAI API
+        // Helper: gọi OpenAI API
         // ======================
         private async Task<string> CallOpenAIAsync(string prompt)
         {

@@ -12,97 +12,82 @@ namespace Repository.DAO
         {
             _context = context;
         }
-
-        /* ========================================
-         *  GET ACCOUNT BY ID
-         * ======================================== */
+        //get by id 
         public async Task<Account?> GetByIdAsync(int id)
         {
             return await _context.Accounts
-                .Include(a => a.UserDetail)  // include user detail
+                .Include(a => a.UserDetail)
+                .Include(a => a.Apikey)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.UserId == id);
         }
 
-        /* ========================================
-         *  LOGIN
-         * ======================================== */
-        public async Task<Account?> LoginAsync(string username, string hashPassword)
+        //Get by username
+        public async Task<Account?> GetByUsernameAsync(string username)
         {
             return await _context.Accounts
                 .Include(a => a.UserDetail)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(a =>
-                    a.Username == username &&
-                    a.HashPass == hashPassword);
+                .Include(a => a.Apikey)
+                .FirstOrDefaultAsync(a => a.Username == username);
         }
 
-        /* ========================================
-         *  CHECK DUPLICATES
-         * ======================================== */
+        //Check duplicate
         public async Task<bool> EmailExistsAsync(string email)
-        {
-            return await _context.Accounts.AnyAsync(a => a.Email == email);
-        }
+            => await _context.Accounts.AnyAsync(a => a.Email == email);
 
         public async Task<bool> UsernameExistsAsync(string username)
-        {
-            return await _context.Accounts.AnyAsync(a => a.Username == username);
-        }
+            => await _context.Accounts.AnyAsync(a => a.Username == username);
 
-        /* ========================================
-         *  REGISTER ACCOUNT
-         * ======================================== */
-        public async Task<Account> RegisterAsync(Account account)
+        //Register
+        public async Task<Account> CreateAsync(Account account)
         {
             _context.Accounts.Add(account);
             await _context.SaveChangesAsync();
+
             return account;
         }
 
-        /* ========================================
-         *  UPDATE ACCOUNT
-         * ======================================== */
-        public async Task<bool> UpdateAsync(Account account)
+        //Update Account Info
+        public async Task<bool> UpdateAccountAsync(Account model)
         {
-            var exists = await _context.Accounts.FirstOrDefaultAsync(x => x.UserId == account.UserId);
+            var acc = await _context.Accounts.FirstOrDefaultAsync(x => x.UserId == model.UserId);
+            if (acc == null) return false;
 
-            if (exists == null) return false;
+            acc.Email = model.Email;
+            acc.Username = model.Username;
+            acc.HashPass = model.HashPass;
 
-            _context.Entry(exists).CurrentValues.SetValues(account);
             await _context.SaveChangesAsync();
-
             return true;
         }
 
-        /* ========================================
-         *  UPDATE USER DETAIL
-         * ======================================== */
+        //Update Information
         public async Task<bool> UpdateUserDetailAsync(UserDetail detail)
         {
-            var existing = await _context.UserDetails
-                .FirstOrDefaultAsync(x => x.UserId == detail.UserId);
+            var exist = await _context.UserDetails.FirstOrDefaultAsync(x => x.UserId == detail.UserId);
 
-            if (existing == null)
+            if (exist == null)
             {
                 _context.UserDetails.Add(detail);
             }
             else
             {
-                _context.Entry(existing).CurrentValues.SetValues(detail);
+                exist.FullName = detail.FullName;
+                exist.Address = detail.Address;
+                exist.Dob = detail.Dob;
+                exist.AvatarUrl = detail.AvatarUrl;
             }
 
             await _context.SaveChangesAsync();
             return true;
         }
 
-        /* ========================================
-         *  DELETE ACCOUNT + USER DETAIL
-         * ======================================== */
+        //Delete
         public async Task<bool> DeleteAsync(int userId)
         {
             var acc = await _context.Accounts
                 .Include(a => a.UserDetail)
+                .Include(a => a.Apikey)
                 .FirstOrDefaultAsync(a => a.UserId == userId);
 
             if (acc == null) return false;
@@ -110,9 +95,12 @@ namespace Repository.DAO
             if (acc.UserDetail != null)
                 _context.UserDetails.Remove(acc.UserDetail);
 
-            _context.Accounts.Remove(acc);
+            if (acc.Apikey != null)
+                _context.Apikeys.Remove(acc.Apikey);
 
+            _context.Accounts.Remove(acc);
             await _context.SaveChangesAsync();
+
             return true;
         }
     }

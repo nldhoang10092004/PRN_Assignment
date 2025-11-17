@@ -1,5 +1,4 @@
-﻿
-using Deepgram;
+﻿using Deepgram;
 using Deepgram.Clients.Interfaces.v1;
 using Deepgram.Clients.Listen.v1.REST;
 using Deepgram.Models.Listen.v1.REST;
@@ -19,16 +18,35 @@ namespace Service
         private readonly PromptModule _prompt;
         private readonly GradingModule _grader;
 
-        public AISpeakingService(int userId, APIKeyDAO apiKeyDao)
+        // 🔒 ctor private: chỉ nhận sẵn key, không gọi DB / async ở đây
+        private AISpeakingService(string deepgramKey, string openAiKey)
         {
-            var apiKey = apiKeyDao.GetApiKeyAsync(userId).Result
-                        ?? throw new Exception("User has no API key configured.");
-
-            _transcriber = new TranscriptionModule(apiKey.DeepgramKey);
-            _prompt = new PromptModule(apiKey.ChatGptkey);
-            _grader = new GradingModule(apiKey.ChatGptkey);
+            _transcriber = new TranscriptionModule(deepgramKey);
+            _prompt = new PromptModule(openAiKey);
+            _grader = new GradingModule(openAiKey);
         }
 
+        // ✅ Async factory: KHÔNG dùng .Result
+        public static async Task<AISpeakingService> CreateAsync(int userId)
+        {
+            var db = new AiIeltsDbContext();
+            var apiKeyDao = new APIKeyDAO(db);
+
+            var apiKey = await apiKeyDao.GetApiKeyAsync(userId)
+                         ?? throw new Exception("User has no API key configured.");
+
+            if (string.IsNullOrWhiteSpace(apiKey.DeepgramKey))
+                throw new Exception("Deepgram API Key is empty.");
+
+            if (string.IsNullOrWhiteSpace(apiKey.ChatGptkey))
+                throw new Exception("ChatGPT API Key is empty.");
+
+            return new AISpeakingService(apiKey.DeepgramKey, apiKey.ChatGptkey);
+        }
+
+        // ======================
+        // Public API cho UI
+        // ======================
         public async Task<string> TranscribeAsync(byte[] fileBytes)
             => await _transcriber.TranscribeAsync(fileBytes);
 
@@ -39,7 +57,9 @@ namespace Service
             GradeSpeakingAsync(string transcript, string topic)
             => await _grader.GradeSpeakingAsync(transcript, topic);
 
-        //Deepgram
+        // ======================
+        // Deepgram
+        // ======================
         public class TranscriptionModule
         {
             private readonly IListenRESTClient _deepgramClient;
@@ -82,7 +102,9 @@ namespace Service
             }
         }
 
-        //ChatGPT
+        // ======================
+        // ChatGPT: Generate topic
+        // ======================
         public class PromptModule
         {
             private readonly HttpClient _http;
@@ -107,11 +129,14 @@ The question must be realistic, clear, and suitable for IELTS Speaking Part 2.
 Return ONLY the JSON, no other text.
 ";
 
-                var jsonResponse = await CallOpenAIAsync(systemPrompt);
+                var rawResponse = await CallOpenAIAsync(systemPrompt);
+
+                // đề phòng model trả kèm chữ linh tinh → bóc JSON ra
+                var extractedJson = ExtractJsonString(rawResponse);
 
                 try
                 {
-                    var doc = JsonDocument.Parse(jsonResponse);
+                    var doc = JsonDocument.Parse(extractedJson);
                     return doc.RootElement.GetProperty("Content").GetString()
                            ?? "Describe a memorable event in your life and explain why it was special.";
                 }
@@ -144,9 +169,17 @@ Return ONLY the JSON, no other text.
                     .GetProperty("content")
                     .GetString() ?? "{}";
             }
+
+            private static string ExtractJsonString(string raw)
+            {
+                var match = System.Text.RegularExpressions.Regex.Match(raw, @"\{[\s\S]*\}");
+                return match.Success ? match.Value : "{}";
+            }
         }
 
-        //Grading
+        // ======================
+        // ChatGPT: Grading
+        // ======================
         public class GradingModule
         {
             private readonly HttpClient _http;
@@ -176,8 +209,8 @@ Provide detailed feedback covering fluency, vocabulary, grammar, and pronunciati
 Return ONLY the JSON, no other text.
 ";
 
-                var jsonResponse = await CallOpenAIAsync(gradingPrompt);
-                var extractedJson = ExtractJson(jsonResponse);
+                var rawResponse = await CallOpenAIAsync(gradingPrompt);
+                var extractedJson = ExtractJson(rawResponse);
 
                 try
                 {

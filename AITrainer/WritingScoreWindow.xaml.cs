@@ -20,13 +20,24 @@ namespace WPFAPP
     /// </summary>
     public partial class WritingScoreWindow : Page
     {
-        public WritingScoreWindow()
+        public WritingScoreWindow(string topic, decimal score, string feedback)
         {
             InitializeComponent();
+
+            ScoreTextBlock.Text = $"AI Score: {score:0.0}";
+            TopicTextBlock.Text = $"Topic: {topic}";
+            FeedbackTextBox.Text = feedback;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            NavigationService?.Navigate(new HomePage());
+
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new HomePage());
 
         }
     }
