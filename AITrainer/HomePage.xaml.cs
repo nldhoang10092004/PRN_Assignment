@@ -27,12 +27,23 @@ namespace WPFAPP
 
         private void StartWriting_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                var ww = new WritingWindow();
+                NavigationService?.Navigate(ww);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error when opening WritingWindow",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
 
         private void StartSpeaking_Click(object sender, RoutedEventArgs e)
         {
-
+            var ww = new SpeakingWindow();
+            NavigationService?.Navigate(ww);
         }
     }
 }
