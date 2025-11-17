@@ -186,19 +186,19 @@
             </Grid.ColumnDefinitions>
 
             <!-- Home -->
-            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" >
                 <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="20" Foreground="#F20231" HorizontalAlignment="Center"/>
                 <TextBlock Text="Home" FontSize="12" Foreground="#F20231" Margin="0,6,0,0" HorizontalAlignment="Center"/>
             </StackPanel>
 
             <!-- Profile -->
-            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" MouseLeftButtonUp="Profile_Click" >
                 <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="18" Foreground="#EFBF7F" HorizontalAlignment="Center" Opacity="0.85"/>
                 <TextBlock Text="Profile" FontSize="12" Foreground="#EFBF7F" Margin="0,6,0,0" HorizontalAlignment="Center"/>
             </StackPanel>
-
+            
             <!-- Setting -->
-            <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center"    MouseLeftButtonUp="Setting_Click">
                 <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="20" Foreground="#EFBF7F" HorizontalAlignment="Center"/>
                 <TextBlock Text="Setting" FontSize="12" Foreground="#EFBF7F" Margin="0,6,0,0" HorizontalAlignment="Center"/>
             </StackPanel>
