@@ -1,0 +1,169 @@
+﻿<Page x:Class="WPFAPP.SettingScreen"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:local="clr-namespace:WPFAPP"
+      mc:Ignorable="d"
+      Title="SettingScreen" Height="900" Width="400" Background="#222">
+    <Page.Resources>
+        <!-- Rounded button style: WPF Button has no CornerRadius property, so wrap content in a Border -->
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#16A34A"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="FontFamily" Value="Inter"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="16"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.95"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <!-- Outer frame with border like the design -->
+        <Border Margin="12" CornerRadius="8" BorderBrush="#CED4DA" BorderThickness="2" Background="#201D69">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="80" />
+                </Grid.RowDefinitions>
+
+                <!-- Content area -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,80,0,0" Grid.RowSpan="2">
+                    <Grid Margin="0,18,0,0">
+                        <StackPanel HorizontalAlignment="Center">
+                            <!-- Header -->
+                            <TextBlock Text="Hi, Team!" FontFamily="Inter" FontWeight="Bold" FontSize="24" Foreground="#F8E4CC" HorizontalAlignment="Center" />
+                            <TextBlock Text="Start Your Journey Here!" FontFamily="Inter" FontSize="14" Foreground="#EFBF7F" HorizontalAlignment="Center" Margin="0,6,0,18"/>
+                            <Border Background="#F8E4CC" CornerRadius="16" Width="305" Padding="20" Height="350">
+                                <StackPanel>
+                                    <TextBlock Text="API Key Setting" FontFamily="Inter" FontWeight="Bold" FontSize="14" Foreground="#12103D" Margin="0,0,0,12"/>
+
+                                    <!-- GPT API block -->
+                                    <StackPanel Margin="0,0,0,12">
+                                        <TextBlock Text="Enter your GPT API key" FontFamily="Inter" FontWeight="SemiBold" FontSize="12" Foreground="#0C5D7B" Margin="4,0,0,6"/>
+                                        <Border Background="#FFFFFF" CornerRadius="12" BorderBrush="#EFBF7F" BorderThickness="1" Padding="8">
+                                            <Grid>
+                                                <TextBox x:Name="txtGptApi" Background="Transparent" BorderThickness="0" FontSize="12" Padding="4" VerticalContentAlignment="Center"/>
+                                                <!-- Watermark/placeholder: visible only when empty and not focused -->
+                                                <TextBlock Text="Paste Your API Key here..." Foreground="#ADAEBC" Margin="8,4,4,4" VerticalAlignment="Center" IsHitTestVisible="False">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding Text, ElementName=txtGptApi}" Value=""/>
+                                                                        <Condition Binding="{Binding IsKeyboardFocusWithin, ElementName=txtGptApi}" Value="False"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Grid>
+                                        </Border>
+                                    </StackPanel>
+
+                                    <!-- DeepGram API block -->
+                                    <StackPanel Margin="0,0,0,18">
+                                        <TextBlock Text="Enter your DeepGram API key" FontFamily="Inter" FontWeight="SemiBold" FontSize="12" Foreground="#0C5D7B" Margin="4,0,0,6"/>
+                                        <Border Background="#FFFFFF" CornerRadius="12" BorderBrush="#EFBF7F" BorderThickness="1" Padding="8">
+                                            <Grid>
+                                                <TextBox x:Name="txtDeepgramApi" Background="Transparent" BorderThickness="0" FontSize="12" Padding="4" VerticalContentAlignment="Center"/>
+                                                <TextBlock Text="Paste Your API Key here..." Foreground="#ADAEBC" Margin="8,4,4,4" VerticalAlignment="Center" IsHitTestVisible="False">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding Text, ElementName=txtDeepgramApi}" Value=""/>
+                                                                        <Condition Binding="{Binding IsKeyboardFocusWithin, ElementName=txtDeepgramApi}" Value="False"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Grid>
+                                        </Border>
+                                    </StackPanel>
+                                    <Button x:Name="BtnSave"
+                                        Content="Save"
+                                        Width="224"
+                                        Height="35"
+                                        Style="{StaticResource RoundedButtonStyle}"
+                                        Click="BtnSave_Click"/>         
+
+                                    <!-- Save button: use the RoundedButtonStyle instead of CornerRadius attribute -->
+
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Card -->
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+
+                <!-- Bottom navigation: using Segoe MDL2 Assets glyphs so no external images required -->
+                <Grid Grid.Row="1" Background="#12103D">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Home -->
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" MouseLeftButtonUp="Home_Click">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="20" Foreground="#F20231" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Home" FontFamily="Inter" FontSize="12" Foreground="#F20231" Margin="0,6,0,0" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Profile -->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"  MouseLeftButtonUp="Profile_Click">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="18" Foreground="#EFBF7F" HorizontalAlignment="Center" Opacity="0.85"/>
+                        <TextBlock Text="Profile" FontFamily="Inter" FontSize="12" Foreground="#EFBF7F" Margin="0,6,0,0" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Setting -->
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" FontSize="20" Foreground="#EFBF7F" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Setting" FontFamily="Inter" FontSize="12" Foreground="#EFBF7F" Margin="0,6,0,0" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Small title top-left -->
+        <TextBlock Foreground="#B6AFAF" FontWeight="SemiBold" FontSize="14" Margin="24,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+    </Grid>
+</Page>

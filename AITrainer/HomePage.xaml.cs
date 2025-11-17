@@ -71,5 +71,18 @@ namespace WPFAPP
             var ww = new SpeakingWindow();
             NavigationService?.Navigate(ww);
         }
+
+        private void Profile_Click(object sender, RoutedEventArgs e)
+        {
+            var ww = new Profile();
+            NavigationService?.Navigate(ww);
+        }
+
+        private void Setting_Click(object sender, MouseButtonEventArgs e)
+        {
+            var s = new SettingScreen();
+            NavigationService?.Navigate(s);
+        }
+
     }
 }
